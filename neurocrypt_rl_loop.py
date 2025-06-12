@@ -1,12 +1,11 @@
-
 import time
 from agentA import EncoderAgentA
-from agentB import DecoderAgentB
+from agentB_ollama import DecoderAgentB  # Updated to use local Ollama model
 from feedback import FeedbackEvaluator
 
 # 🧠 Initialize Components
 encoder = EncoderAgentA()
-decoder = DecoderAgentB(groq_api_key="your_groq_api_key_here")
+decoder = DecoderAgentB(model_name="phi3")  # Set your Ollama model here
 evaluator = FeedbackEvaluator()
 
 # 🧪 Batch Mode Dataset
@@ -46,7 +45,7 @@ for i, sample in enumerate(dataset):
     if feedback['score'] < 1.0:
         examples.append({"encoded": sample['encoded'], "plain": sample['plain']})
 
-    time.sleep(2.1)  # To respect Groq's 30 RPM limit
+    time.sleep(0.5)  # Faster loop since local model doesn't require strict rate limits
 
 # 📈 Summary
 avg_score = sum(eval_history) / len(eval_history)
